@@ -1,0 +1,35 @@
+- name: Installer Node.js v20.8.0 directement
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Installer les dépendances de construction
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop:
+        - python3
+        - make
+        - g++
+        - curl
+        - build-essential
+        - libssl-dev
+ 
+    - name: Télécharger Node.js v20.8.0
+      get_url:
+        url: https://nodejs.org/dist/v20.8.0/node-v20.8.0-linux-x64.tar.xz
+        dest: "/tmp/node-v20.8.0-linux-x64.tar.xz"
+ 
+    - name: Extraire Node.js dans /usr/local
+      unarchive:
+        src: "/tmp/node-v20.8.0-linux-x64.tar.xz"
+        dest: "/usr/local"
+        remote_src: yes
+        extra_opts: [--strip-components=1]
+ 
+    - name: Mettre à jour les liens symboliques pour Node et NPM
+      shell: >
+        ln -sf /usr/local/bin/node /usr/bin/node &&
+        ln -sf /usr/local/bin/npm /usr/bin/npm &&
+        ln -sf /usr/local/bin/npx /usr/bin/npx
+        // a la version

@@ -1,0 +1,29 @@
+
+- hosts: localhost
+  become: yes
+  tasks:
+    - name: Mettre à jour les packages apt
+      apt:
+        update_cache: yes
+
+    - name: Installer Node.js
+      apt:
+        name: nodejs
+        state: present
+
+    - name: Installer Python3
+      apt:
+        name: python3
+        state: present
+
+    - name: Installer Make
+      apt:
+        name: make
+        state: present
+
+    - name: Installer G++
+      apt:
+        name: g++
+        state: present
+//a la version
+

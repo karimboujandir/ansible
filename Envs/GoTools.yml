@@ -1,0 +1,26 @@
+---
+- name: Installer les outils Go et les dépendances nécessaires
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Mettre à jour la liste des paquets et installer les dépendances Go
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop:
+        - build-essential  
+
+    - name: Installer Go
+      shell: |
+        wget https://dl.google.com/go/go1.21.3.linux-amd64.tar.gz -O /tmp/go1.21.3.linux-amd64.tar.gz
+        tar -C /usr/local -xzf /tmp/go1.21.3.linux-amd64.tar.gz
+      args:
+        creates: /usr/local/go/bin/go
+
+    - name: Configurer le PATH pour Go
+      lineinfile:
+        path: ~/.profile
+        line: 'export PATH=$PATH:/usr/local/go/bin'
+        create: yes
+// a la version

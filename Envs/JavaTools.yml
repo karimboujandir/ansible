@@ -1,0 +1,22 @@
+---
+- hosts: localhost
+  become: yes
+  tasks:
+    - name: Update apt packages
+      apt:
+        update_cache: yes
+    - name: "Add Eclipse Adoptium GPG key"
+      apt_key:
+        url: https://packages.adoptium.net/artifactory/api/gpg/key/public
+        state: present
+ 
+    - name: "Add Eclipse repo"
+      apt_repository:
+        repo: deb https://packages.adoptium.net/artifactory/deb {{ ansible_distribution_release }} main
+        state: present
+    - name: "Install temurin 21 jdk"
+      apt:
+        name: temurin-21-jdk
+        state: present
+ 
+
